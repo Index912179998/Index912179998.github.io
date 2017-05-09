@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Java输入输出</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
+</head>
+<body>
+<h1 id="java-">Java输入输出</h1>
+<h3 id="io-">IO概念</h3>
+<p>输入输出（I/O）是所有程序都必须的部分——使用输入输出机制，允许程序读取或录入数据，实现数据的交互，Java的IO通过java.io包下的类和接口来支持，在java.io包下主要包括输入、输出两种IO流，每种输入输出流又可分为字节流和字符流两大类。其中字节流以字节为单位处理输入输出操作，而字符流则以字符来处理输入输出操作。</p>
+<h3 id="file-">File类</h3>
+<p>什么是File类？<br>File类是java.io包下代表与平台无关的文件和目录，也就是说，如果希望在程序中操作文件和目录，都可以通过File类来完成。针对于文件或目录都可以用File来操作，包括新建、删除、重命名。但是File不能访问文件内容本身，如果需要访问文件内容，则需要使用输入输出流。</p>
+<p>注:(File类提供了与平台无关的方法来对磁盘上的文件或目录进行操作。因为不同的系统平台对文件路径的描述不尽相同(例如Linux下的根目录和Windows下的各种盘符等)，所以为了做到平台无关，在Java语言中，使用抽象路径等概念。Java自动进行不同系统平台的文件路径描述与抽象文件路径之间的转换。)体现了java的跨平台性</p>
+<p>1 访问文件和目录</p>
+<p>1.1访问文件名相关的方法<br>String getName():返回此File对象所表示的文件名或路径名(如果是路径，则返回最后一级子路径名)<br>String getPath():返回此File对象所对应的路径名<br>File getAbsoluteFile():返回此File对象的绝对路径<br>String getAbsolutePath():返回此File对象所对应的绝对路径名<br>String getParent():返回此File对象所对应目录(最后一级子目录)的父目录名<br>boolean renameTo(File newName):重命名此File对象所对应的文件或目录，如果成功则返回True，否则false</p>
+<p>1.2 文件检测相关的方法</p>
+<p>boolean exists():判断File对象所对应的文件或目录是否存在<br>boolean canWrite():判断File对象所对应的文件或目录是否可写<br>boolean canRead():判断File对象所对应的文件或目录是否可读<br>boolean isFile():判断File对象所对应的是否是文件，而不是目录<br>boolean isDirectory():判断File对象所对应的是否是目录，而不是文件<br>boolean isAbsolute():判断File对象所对应的文件或目录是否是绝对路径，该方法消除了不同平台的差异，在Linux平台上开始是(/)或者在Windows系统上开头是盘符，则说明它是一个绝对路径</p>
+<p>1.3获取常规文件信息</p>
+<p>long lastModified():返回文件的最后修改时间<br>long length():返回文件内容的长度</p>
+<p>1.4文件操作相关的方法</p>
+<p>boolean createNewFile():当此File对象所对应的文件不存在时，该方法会新建一个文件，如果创建成功则返回true,否则false<br>boolean delete():删除File对象所对应的文件或路径<br>void deleteOnExit():注册一个删除钩子，制定当java虚拟机退出时，删除File对象所对应的文件和目录<br>static File createTempFile(String prefix,String suffix,File directory):在directory目录中创建一个临时空文件，使用给定前缀+系统生成随机数作为文件名</p>
+<p>1.5目录操作相关的方法</p>
+<p>boolean mkdir():试图创建一个File对象所对应的目录，如果创建成功，则返回true，否则返回false，调用该方法时File对象必须对应一个路径，而不是一个文件<br>String[] list():列出File对象的所有子文件名和路径名，返回String数组<br>File[] listFiles():列出File对象的所有子文件和路径，返回File数组<br>static File[] listRoots():列出系统所有的根路径</p>
+<p>注意：Windows路径分隔符使用反斜线()，而JAVA程序中的反斜线表示转义字符，所以如果需要在Windows路径中包括反斜线，应该用两条反斜线，如：E:\aaa\aaa.txt，或者直接使用斜线也可以.Java程序支持将斜线（/）当成平台无关的路径分隔符.<br>例子：筛选.java文件</p>
+<pre><code>import java.io.*;
+public class Demo1
+{
+    public static void main(String[] args){
+        File file = new File(&quot;E:/java项目&quot;);
+        findfile(file);
+    }
+    public static void findfile(File f){
+        //运用递归方式排除文件夹
+        if(f.isDirectory()){
+            File [] ff = f.listFiles();
+            for(File x: ff){
+                findfile(x);
+            }
+        }else{
+            //剩下的就是文件
+            if(f.getName().endsWith(&quot;.java&quot;)){
+                System.out.println(f.getAbsolutePath());
+            }
+        }
+    }
+}
+</code></pre><h1 id="java-i-o-">java的i/o流（输入输出流）</h1>
+<p>io流是实现输入输出的基础，可以方便数据操作，在java中把不同的输入输出源(键盘、网络、文件等)抽象为流stream，是从起源source到接收sink的有序数据。</p>
+<p>2.1输入输出流<br>输入流：只能从中读取数据，而不能向其写入数据<br>输出流：只能写入，不能读取<br>注意:划分输入输出流是根据内存的角度考虑的</p>
+<p>2.2字节流字符流<br>用法几乎完全一样，只是操作的数据单元不同，字节是8位一字节位处理单元，而字符流则是16位两字节</p>
+<p>例子：字符流</p>
+<pre><code>import java.util.*;
+import java.io.*;
+public class Demo
+{
+    public static Scanner sc = new Scanner(System.in);
+    public static StringBuffer sb = new StringBuffer();
+    public static void main(String[] args){
+        File file = new File(&quot;2.properties&quot;);
+        if(!file.exists()){
+            try{
+                file.createNewFile();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        FileReader fr = null;
+        try{
+            fr = new FileReader(file);
+            char[] cc = new char[10];
+            int len =0;
+            while((len = fr.read(cc)) !=-1){
+                sb.append(cc,0,len);
+            }
+            System.out.println(sb);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        FileWriter fw = null;
+        try{
+            fw = new FileWriter(file);
+            System.out.println(&quot;输入内容&quot;);
+            sb.append(sc.next()+&quot;\n&quot;);
+            fw.write(sb.toString());
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            if(fw!=null){
+                try{
+                    fw.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Properties pps = new Properties();
+        try{
+            FileInputStream fis = new FileInputStream(file);
+            pps.load(fis);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        String s1 = sc.next();
+        if(s1.equals(pps.getProperty(&quot;username&quot;))){
+            System.out.println(&quot;yes&quot;);
+        }
+
+    }
+}
+</code></pre><p>例子：字节流</p>
+<pre><code>import java.util.*;
+import java.io.*;
+public class Demo
+{
+    public static Scanner sc = new Scanner(System.in);
+    public static void main(String[] args){
+        File file = new File(&quot;1.properties&quot;);
+        if(!file.exists()){
+            try{
+                file.createNewFile();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try{
+            fis = new FileInputStream(file);
+            byte[] bi = new byte[10];
+            int len = 0;
+            StringBuffer sb = new StringBuffer();
+            while((len = fis.read(bi)) != -1){
+                sb.append(new String(bi,0,len));
+            }
+            System.out.println(sb);
+            fis.read(bi);
+
+            fos = new FileOutputStream(file);
+            //String so = sb.toString()+sc.next()+&#39;\n&#39;;
+            //fos.write(so.getBytes());
+            String so = new String(sb.append(sc.next()+&quot;\n&quot;));
+            fos.write(so.getBytes());
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{//注意:按道理来说Finally的close应该写在写入流后面就可以了，但是如果写入流在前读取流在后，下面读取流执行的时候会报错&quot;流已经关闭了&quot;，所以应该写在读取流后面，等一切执行完成后再关闭
+            if(fos!=null){
+                try{
+                    fos.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        Properties pps = new Properties();
+        try{
+            pps.load(new FileInputStream(file));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(&quot;姓名匹配：&quot;);
+        String name = sc.next();
+        if(name.equals(pps.getProperty(&quot;name&quot;))){
+            System.out.println(&quot;yes&quot;);
+        }else{
+            System.out.println(&quot;no&quot;);
+        }
+    }
+}
+</code></pre><p>例子：RandomAccessFile输入输出</p>
+<pre><code>import java.io.*;
+import java.util.*;
+public class Demo
+{
+    public static Scanner sc = new Scanner(System.in);
+    public static void main(String[] args){
+        File file = new File(&quot;1.properties&quot;);
+        if(!file.exists()){
+            try{
+                file.createNewFile();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        RandomAccessFile raf = null;
+        try{
+            raf = new RandomAccessFile(file,&quot;rw&quot;);
+            /*//读取1
+            byte[] bb = new byte[(int)file.length()];
+            raf.seek(0);
+            raf.read(bb);
+            String str = new String(bb);
+            System.out.println(str);*/
+
+            //写入
+            raf.seek(file.length());
+            System.out.println(&quot;录入&quot;);
+            String sw = sc.next()+&#39;\n&#39;;
+            raf.write(sw.getBytes());
+
+
+            //读取2
+            raf.seek(0);
+            byte[] br = new byte[10];
+            int len = 0;
+            StringBuffer sb = new StringBuffer();
+            while((len = raf.read(br)) != -1){
+                //String sr = new String(br,0,len);
+                sb.append(new String(br,0,len));
+            }
+            System.out.println(sb);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{//注意:按道理来说Finally的close应该写在写入流后面就可以了，但是如果写入流在前读取流在后，下面读取流执行的时候会报错&quot;流已经关闭了&quot;，所以应该写在读取流后面，等一切执行完成后再关闭
+            if(raf!=null){
+                try{
+                    raf.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        Properties pps = new Properties();
+        try{
+        pps.load(new FileInputStream(file));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(&quot;秘钥&quot;);
+        String secret = sc.next();
+        if(secret.equals(pps.getProperty(&quot;password&quot;))){
+            System.out.println(&quot;匹配成功&quot;);
+        }else{
+            System.out.println(&quot;匹配失败&quot;);
+        }
+    }
+}
+</code></pre>
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
