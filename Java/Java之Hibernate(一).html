@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Java之Hibernate(一)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
+</head>
+<body>
+<h1 id="java-hibernate-">Java之Hibernate(一)</h1>
+<p>官方：<br>&emsp;Hibernate是一个开放源代码的对象关系映射框架，它对JDBC进行了非常轻量级的对象封装，它将POJO与数据库表建立映射关系，是一个全自动的orm框架，hibernate可以自动生成SQL语句，自动执行，使得Java程序员可以随心所欲的使用对象编程思维来操纵数据库。 Hibernate可以应用在任何使用JDBC的场合，既可以在Java的客户端程序使用，也可以在Servlet/JSP的Web应用中使用，最具革命意义的是，Hibernate可以在应用EJB的J2EE架构中取代CMP，完成数据持久化的重任。</p>
+<p>个人理解：<br>&emsp;Hibernate是MVC开发模式中处理Dao层的一种方式，是SSH(Struts、Spring、Hibernate)三大框架的其中之一。目前最新版本是5.2.11，这里测试用的是4.3.11。</p>
+<p>&emsp;<a href="http://hibernate.org/orm/downloads/">Hibernate下载地址</a><br>&emsp;<a href="https://www.tutorialspoint.com/hibernate/hibernate_configuration.htm">Hibernate教学文档</a><br>&emsp;<a href="https://mvnrepository.com/artifact/mysql/mysql-connector-java">Maven添加mysql-connector的jar包</a></p>
+<h3 id="hibernate-">Hibernate要点</h3>
+<p>1.对象持久化<br>2.关系映射<br>3.组件映射和继承映射<br>4.持久化对象检索方式</p>
+<h3 id="-hibernate">配置Hibernate</h3>
+<p>1.通过Maven加载hibernate的jar包，在pom.xml文件中添加</p>
+<pre><code>&lt;dependency&gt;
+      &lt;groupId&gt;org.hibernate&lt;/groupId&gt;
+      &lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;
+      &lt;version&gt;4.3.11.Final&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><p>2.在resources目录中建立hibernate.cfg.xml文件并编写</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;!DOCTYPE hibernate-configuration PUBLIC
+        &quot;-//Hibernate/Hibernate Configuration DTD 3.0//EN&quot;
+        &quot;http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd&quot;&gt;
+&lt;hibernate-configuration&gt;
+    &lt;session-factory&gt;
+        &lt;!--数据库链接设置 驱动 uri 用户名  密码--&gt;
+        &lt;property name=&quot;hibernate.connection.driver_class&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;
+        &lt;!-- Assume test is the database name --&gt;
+        &lt;property name=&quot;hibernate.connection.url&quot;&gt;jdbc:mysql://localhost/hibernatetest&lt;/property&gt;
+        &lt;property name=&quot;hibernate.connection.username&quot;&gt;root&lt;/property&gt;
+        &lt;property name=&quot;hibernate.connection.password&quot;&gt;123&lt;/property&gt;
+        &lt;!--SQL  方言--&gt;
+        &lt;property name=&quot;hibernate.dialect&quot;&gt;org.hibernate.dialect.MySQL5Dialect&lt;/property&gt;
+        &lt;!--将执行过的Sql文件在控制台输出--&gt;
+        &lt;property name=&quot;show_sql&quot;&gt;true&lt;/property&gt;
+        &lt;!--create 根据映射关系创建表  添加数据 每次drop表  然后创建表再添加数据--&gt;
+        &lt;!--&lt;property name=&quot;hbm2ddl.auto&quot;&gt;create&lt;/property&gt;--&gt;
+        &lt;!--更新表--&gt;
+        &lt;property name=&quot;hbm2ddl.auto&quot;&gt;update&lt;/property&gt;
+
+        &lt;!-- List of XML mapping files --&gt;
+        &lt;mapping resource=&quot;mapping/Student.hbm.xml&quot;&gt;&lt;/mapping&gt;
+
+    &lt;/session-factory&gt;
+&lt;/hibernate-configuration&gt;
+</code></pre><p>3.在项目中的bean目录下添加类</p>
+<pre><code>package com.linyi.bean;
+
+public class Student {
+    private int id;
+    private String name;
+    private int age;
+    private String sex;
+    private Teacher teacher;
+
+    public Student() {
+    }
+
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Student(String name, int age, String sex) {
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    }
+
+    public Student(int id, String name, int age, String sex) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Student{&quot; +
+                &quot;id=&quot; + id +
+                &quot;, name=&#39;&quot; + name + &#39;\&#39;&#39; +
+                &quot;, age=&quot; + age +
+                &quot;, sex=&#39;&quot; + sex + &#39;\&#39;&#39; +
+                &#39;}&#39;;
+    }
+}
+</code></pre><p>4.在resources中建立mapping映射文件夹并在里面创建Student.hbm.xml文件，向里面添加如下代码</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE hibernate-mapping PUBLIC
+        &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;
+        &quot;http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd&quot;&gt;
+&lt;hibernate-mapping package=&quot;com.linyi.bean&quot;&gt;
+    &lt;class name=&quot;Student&quot; table=&quot;student&quot;&gt;
+        &lt;id name=&quot;id&quot; column=&quot;id&quot;&gt;
+            &lt;!--主键自增模式--&gt;
+            &lt;generator class=&quot;native&quot; /&gt;
+        &lt;/id&gt;
+        &lt;property name=&quot;name&quot; column=&quot;name&quot; /&gt;
+        &lt;property name=&quot;age&quot; column=&quot;age&quot; /&gt;
+        &lt;property name=&quot;sex&quot; column=&quot;sex&quot; /&gt;
+
+    &lt;/class&gt;
+    &lt;query name=&quot;testselect&quot;&gt;
+        &lt;![CDATA[SELECT new Student(id,name) FROM Student ]]&gt;
+    &lt;/query&gt;
+&lt;/hibernate-mapping&gt;
+</code></pre><p>5.在项目文件夹里新建测试专用文件夹test，然后新建测试类，使用junit组件来进行测试。</p>
+<pre><code>package com.linyi.test;
+
+import com.linyi.bean.Student;
+import com.linyi.bean.Teacher;
+import org.hibernate.*;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class TestHibernate {
+    //junit 需要加包  用于测试代码
+    @Test
+    public void testCreate(){
+        //读取配置
+        Configuration cfg = new Configuration().configure();
+        //会话工厂
+        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        //获取session
+        Session session = sessionFactory.openSession();
+        //开启事务
+        Transaction transaction = session.beginTransaction();
+
+        session.save(new Student(&quot;songjun&quot;,110,&quot;female&quot;));
+        //提交事务
+        transaction.commit();
+        //关闭事务
+        session.close();
+    }
+    @Test
+    public void testSelect(){
+        //读取配置
+        Configuration cfg = new Configuration().configure();
+        //会话工厂
+        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        //获取session
+        Session session = sessionFactory.openSession();
+        //开启事务
+        Transaction transaction = session.beginTransaction();
+
+        String hql = &quot;FROM com.linyi.bean.Student&quot;;//HQL 查询所有数据
+        String hql1= &quot;SELECT s.age FROM com.linyi.bean.Student AS s&quot;;
+        //Using Named Paramters 使用命名参数
+//        String hql2 = &quot;FROM com.linyi.bean.Student AS S WHERE S.id = :id&quot;;
+        Query query = session.createQuery(hql);
+//        query.setParameter(&quot;id&quot;,1);
+//        List&lt;Student&gt; results = query.list();
+        List results = query.list();//时刻注意这里的数据类型  注意上边传来的是类还是字符串
+        System.out.println(results.size());
+        for(Object s:results){
+            System.out.println(s);
+        }
+
+        //提交事务
+        transaction.commit();
+        //关闭事务
+        session.close();
+    }
+    @Test
+    public void testSelect2(){
+        //读取配置
+        Configuration cfg = new Configuration().configure();
+        //会话工厂
+        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        //获取session
+        Session session = sessionFactory.openSession();
+        //开启事务
+        Transaction transaction = session.beginTransaction();
+
+        Criteria cr =session.createCriteria(Student.class);//标准查询  不推荐使用
+        cr.add(Restrictions.eq(&quot;age&quot;,100));//dt 是大于 lt是小于
+        List results = cr.list();
+        for(Object s:results){
+            System.out.println(s);
+        }
+        //提交事务
+        transaction.commit();
+        //关闭事务
+        session.close();
+    }
+    @Test
+    public void testSelect3(){
+        //读取配置
+        Configuration cfg = new Configuration().configure();
+        //会话工厂
+        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        //获取session
+        Session session = sessionFactory.openSession();
+        //开启事务
+        Transaction transaction = session.beginTransaction();
+
+        String sql = &quot;SELECT * FROM student&quot;;//SQL 语句查询
+        SQLQuery query = session.createSQLQuery(sql);
+        query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+        List results = query.list();
+        for(Object s:results){
+            System.out.println(s);
+        }
+        //提交事务
+        transaction.commit();
+        //关闭事务
+        session.close();
+    }
+    @Test
+    public void testSelect4(){//9.18日
+        //读取配置
+        Configuration cfg = new Configuration().configure();
+        //会话工厂
+        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        //获取session
+        Session session = sessionFactory.openSession();
+        //开启事务
+        Transaction transaction = session.beginTransaction();
+
+        //1.实体查询
+        //String hql = &quot;FROM Student&quot;;
+        //2.查询具体属性
+        //String hql = &quot;SELECT id,name FROM Student&quot;;
+//        String hql = &quot;SELECT new Student(id,name) FROM Student&quot;;//必须提供相应的构造器
+//        List lists = session.createQuery(hql).list();
+//        List lists = session.getNamedQuery(&quot;testselect&quot;).list();
+//        for(Object s:lists){
+//            System.out.println(s);
+//        }
+        Student s= (Student)session.get(Student.class,1);
+        System.out.println(s);
+        //提交事务
+        transaction.commit();
+        //关闭事务
+        session.close();
+    }
+    @Test
+    public void testSelect5(){//9.18日  状态
+        //读取配置
+        Configuration cfg = new Configuration().configure();
+        //会话工厂
+        SessionFactory sessionFactory = cfg.buildSessionFactory();
+        //获取session
+        Session session = sessionFactory.openSession();
+        //开启事务
+        Transaction transaction = session.beginTransaction();
+
+//        Student student = new Student(&quot;huatai&quot;,15,&quot;nan&quot;);
+//
+        Student s= (Student)session.get(Student.class,2);
+        s.setName(&quot;houzi&quot;);
+//        System.out.println(s);
+        //提交事务
+        transaction.commit();
+        //关闭事务
+        session.close();
+    }
+}
+</code></pre>
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
