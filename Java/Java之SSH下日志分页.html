@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Java之SSH下日志分页</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+<style type="text/css">
+.highlight  { background: #ffffff; }
+.highlight .c { color: #999988; font-style: italic } /* Comment */
+.highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.highlight .k { font-weight: bold } /* Keyword */
+.highlight .o { font-weight: bold } /* Operator */
+.highlight .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.highlight .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.highlight .gd .x { color: #000000; background-color: #ffaaaa } /* Generic.Deleted.Specific */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #aa0000 } /* Generic.Error */
+.highlight .gh { color: #999999 } /* Generic.Heading */
+.highlight .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.highlight .gi .x { color: #000000; background-color: #aaffaa } /* Generic.Inserted.Specific */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #555555 } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #aaaaaa } /* Generic.Subheading */
+.highlight .gt { color: #aa0000 } /* Generic.Traceback */
+.highlight .kc { font-weight: bold } /* Keyword.Constant */
+.highlight .kd { font-weight: bold } /* Keyword.Declaration */
+.highlight .kp { font-weight: bold } /* Keyword.Pseudo */
+.highlight .kr { font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #445588; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #009999 } /* Literal.Number */
+.highlight .s { color: #d14 } /* Literal.String */
+.highlight .na { color: #008080 } /* Name.Attribute */
+.highlight .nb { color: #0086B3 } /* Name.Builtin */
+.highlight .nc { color: #445588; font-weight: bold } /* Name.Class */
+.highlight .no { color: #008080 } /* Name.Constant */
+.highlight .ni { color: #800080 } /* Name.Entity */
+.highlight .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #990000; font-weight: bold } /* Name.Function */
+.highlight .nn { color: #555555 } /* Name.Namespace */
+.highlight .nt { color: #000080 } /* Name.Tag */
+.highlight .nv { color: #008080 } /* Name.Variable */
+.highlight .ow { font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #009999 } /* Literal.Number.Float */
+.highlight .mh { color: #009999 } /* Literal.Number.Hex */
+.highlight .mi { color: #009999 } /* Literal.Number.Integer */
+.highlight .mo { color: #009999 } /* Literal.Number.Oct */
+.highlight .sb { color: #d14 } /* Literal.String.Backtick */
+.highlight .sc { color: #d14 } /* Literal.String.Char */
+.highlight .sd { color: #d14 } /* Literal.String.Doc */
+.highlight .s2 { color: #d14 } /* Literal.String.Double */
+.highlight .se { color: #d14 } /* Literal.String.Escape */
+.highlight .sh { color: #d14 } /* Literal.String.Heredoc */
+.highlight .si { color: #d14 } /* Literal.String.Interpol */
+.highlight .sx { color: #d14 } /* Literal.String.Other */
+.highlight .sr { color: #009926 } /* Literal.String.Regex */
+.highlight .s1 { color: #d14 } /* Literal.String.Single */
+.highlight .ss { color: #990073 } /* Literal.String.Symbol */
+.highlight .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #008080 } /* Name.Variable.Class */
+.highlight .vg { color: #008080 } /* Name.Variable.Global */
+.highlight .vi { color: #008080 } /* Name.Variable.Instance */
+.highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
+.pl-c {
+    color: #969896;
+}
+
+.pl-c1,.pl-mdh,.pl-mm,.pl-mp,.pl-mr,.pl-s1 .pl-v,.pl-s3,.pl-sc,.pl-sv {
+    color: #0086b3;
+}
+
+.pl-e,.pl-en {
+    color: #795da3;
+}
+
+.pl-s1 .pl-s2,.pl-smi,.pl-smp,.pl-stj,.pl-vo,.pl-vpf {
+    color: #333;
+}
+
+.pl-ent {
+    color: #63a35c;
+}
+
+.pl-k,.pl-s,.pl-st {
+    color: #a71d5d;
+}
+
+.pl-pds,.pl-s1,.pl-s1 .pl-pse .pl-s2,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre,.pl-src,.pl-v {
+    color: #df5000;
+}
+
+.pl-id {
+    color: #b52a1d;
+}
+
+.pl-ii {
+    background-color: #b52a1d;
+    color: #f8f8f8;
+}
+
+.pl-sr .pl-cce {
+    color: #63a35c;
+    font-weight: bold;
+}
+
+.pl-ml {
+    color: #693a17;
+}
+
+.pl-mh,.pl-mh .pl-en,.pl-ms {
+    color: #1d3e81;
+    font-weight: bold;
+}
+
+.pl-mq {
+    color: #008080;
+}
+
+.pl-mi {
+    color: #333;
+    font-style: italic;
+}
+
+.pl-mb {
+    color: #333;
+    font-weight: bold;
+}
+
+.pl-md,.pl-mdhf {
+    background-color: #ffecec;
+    color: #bd2c00;
+}
+
+.pl-mdht,.pl-mi1 {
+    background-color: #eaffea;
+    color: #55a532;
+}
+
+.pl-mdr {
+    color: #795da3;
+    font-weight: bold;
+}
+
+.pl-mo {
+    color: #1d3e81;
+}
+.task-list {
+padding-left:10px;
+margin-bottom:0;
+}
+
+.task-list li {
+    margin-left: 20px;
+}
+
+.task-list-item {
+list-style-type:none;
+padding-left:10px;
+}
+
+.task-list-item label {
+font-weight:400;
+}
+
+.task-list-item.enabled label {
+cursor:pointer;
+}
+
+.task-list-item+.task-list-item {
+margin-top:3px;
+}
+
+.task-list-item-checkbox {
+display:inline-block;
+margin-left:-20px;
+margin-right:3px;
+vertical-align:1px;
+}
+</style>
+</head>
+<body>
+<h1 id="java-ssh-">Java之SSH下日志分页</h1>
+<p>&emsp;大多情况下不需要一次性查询多条数据，只需查询几条显示出来即可，这里需要用到分页。</p>
+<h2 id="-">实现步骤</h2>
+<p>前提：在实现日志记录的基础上</p>
+<h3 id="1-bean-pageuitl-java">1.创建bean类，例如PageUitl.java</h3>
+<pre><code>package com.linyi.utils;
+
+import java.util.List;
+
+public class PageUtil {
+    private int currentPageNum;
+    private int startPageNum;
+    private int endPageNum;
+    private int countPageNum;//总页数
+    private int countNum;//总记录数
+    private List list;
+    private int showPageCount = 2;//每页显示记录数
+
+    public PageUtil() {
+    }
+
+    public PageUtil( int countNum,int currentPageNum, int showPageCount) {
+
+        this.countNum = countNum;//总条数
+        this.currentPageNum = currentPageNum;//当前页数
+        if (showPageCount==0){
+            this.showPageCount=2;//每页显示数
+        }else {
+            this.showPageCount = showPageCount;
+        }
+        this.setCountPageNum();//总页数
+//        this.setStartPageNum();//开始页数
+//        this.setEndPageNum();//结束页数
+        this.setStartEndPage();//设置其实结束页面
+
+//        this.setEndPageNum();
+    }
+
+    public void setStartEndPage() {
+        //开始页由1开始
+        startPageNum = 1;
+        //开始页为结束页减去4
+        endPageNum = countPageNum;
+        //判断总页码是否大于5
+        if(countPageNum&gt;5){
+            //判断当前页码是否大于总页码
+            if(currentPageNum&gt;countPageNum){
+                currentPageNum=countPageNum;//当前页大于总页数，总页数就等于结束页
+            }
+            if(currentPageNum&lt;=0){
+                currentPageNum = 1;
+            }
+            //判断当前页码是否大于3
+            if(currentPageNum&gt;=3){
+                //如果总页数-当前页大于等于2，结束也为当前页+2
+                if(countPageNum-currentPageNum&gt;=2){
+                    endPageNum = currentPageNum+2;
+                }else {
+                    //如果总页数减去当前页小于2，结束页为当前页+总页数-当前页
+                    endPageNum = currentPageNum+(countPageNum-currentPageNum);
+                }
+                startPageNum = endPageNum-4;
+            }else if (currentPageNum&lt;3){
+                endPageNum = startPageNum+4;//如果当前页码小于3，就是起始页码+4
+            }
+        }
+
+
+    }
+
+    public int getCurrentPageNum() {
+        return currentPageNum;
+    }
+
+    public void setCurrentPageNum(int currentPageNum) {
+        this.currentPageNum = currentPageNum;
+    }
+
+    public int getStartPageNum() {
+        return startPageNum;
+    }
+
+    public void setStartPageNum() {
+//        this.startPageNum = startPageNum;
+    }
+
+    public int getEndPageNum() {
+        return endPageNum;
+    }
+
+    public void setEndPageNum() {
+//        this.endPageNum = endPageNum;
+    }
+
+    public int getCountPageNum() {
+        return countPageNum;
+    }
+    //设置总页数
+    public void setCountPageNum() {
+        double res = this.countNum/(double)this.showPageCount;
+        this.countPageNum = (int)Math.ceil(res);
+    }
+
+    public int getCountNum() {
+        return countNum;
+    }
+
+    public void setCountNum(int countNum) {
+        this.countNum = countNum;
+    }
+
+    public List getList() {
+        return list;
+    }
+
+    public void setList(List list) {
+        this.list = list;
+    }
+
+    public int getShowPageCount() {
+        return showPageCount;
+    }
+
+    public void setShowPageCount(int showPageCount) {
+        this.showPageCount = showPageCount;
+    }
+
+    /**
+     * 计算当前页起始记录
+     * @param pageSize 每页记录数
+     * @param currentPage 当前第几页
+     * @return
+     * 为了求出从第几条数据显示到第几条  这里offset是起始数值
+     */
+    public Integer countOffset(Integer pageSize,Integer currentPage){
+        Integer offset = pageSize*(currentPage-1);
+        return offset;
+    }
+}
+</code></pre><p>2.以分页的方式请求记录等属性，算是一个特殊方法我们在LogService接口下加入新方法</p>
+<pre><code>package com.linyi.service;
+
+import com.linyi.bean.Log;
+import com.linyi.fengzhuang.BaseService;
+import com.linyi.utils.PageUtil;
+
+import java.util.List;
+
+public interface LogService&lt;T&gt; extends BaseService&lt;T&gt; {
+    public PageUtil getLogsByPage(Integer currentPage, Integer pageSize);
+}
+</code></pre><p>3.在LogServiceImpl.java也就是LogService的实现类里实现方法</p>
+<pre><code>package com.linyi.service.impl;
+
+import com.linyi.bean.Log;
+import com.linyi.dao.LogDao;
+import com.linyi.fengzhuang.BaseServiceImpl;
+import com.linyi.service.LogService;
+import com.linyi.utils.PageUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Service
+public class LogServiceImpl extends BaseServiceImpl&lt;Log&gt; implements LogService&lt;Log&gt;{
+    @Autowired
+    private LogDao&lt;Log&gt; logDao;
+    public LogServiceImpl(LogDao logDao){
+        super.setBaseDao(logDao);
+        this.logDao = logDao;
+    }
+
+    @Transactional
+    public PageUtil getLogsByPage(Integer currentPage, Integer pageSize) {
+        Integer allRow = logDao.getCount();//总条数
+        PageUtil page = new PageUtil(allRow,currentPage,pageSize);
+        List&lt;Log&gt; logs = logDao.queryForPage(page.countOffset(page.getShowPageCount(),page.getCurrentPageNum()),pageSize);
+        page.setList(logs);
+        return page;
+    }
+
+}
+</code></pre><p>4.在BaseDao接口加入</p>
+<pre><code>    //得到总条数    
+    public Integer getCount();
+    //limit
+    public List&lt;T&gt; queryForPage(int offset, int length);
+</code></pre><p>5.实现第四步的方法在BaseDaoImpl里</p>
+<pre><code>public Integer getCount() {
+//        sessionFactor
+        Query q = sessionFactory.getCurrentSession().createQuery(&quot;SELECT COUNT (*) FROM &quot;+className);
+        return Integer.parseInt(q.list().get(0).toString());
+    }
+    public List&lt;T&gt; queryForPage(int offset, int length) {
+        Query q = sessionFactory.getCurrentSession().createQuery(&quot;FROM &quot;+className);
+        q.setFirstResult(offset);
+        q.setMaxResults(length);
+        return q.list();
+    }
+</code></pre><p>6.jsp页面改动</p>
+<pre><code>
+&lt;%--
+  Created by IntelliJ IDEA.
+  User: Hai
+  Date: 2017/9/27
+  Time: 10:53
+  To change this template use File | Settings | File Templates.
+--%&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;%@ taglib prefix=&quot;s&quot; uri=&quot;/struts-tags&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;日志记录&lt;/title&gt;
+
+    &lt;script src=&quot;/js/jquery-1.11.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;style&gt;
+        body{box-sizing: border-box; padding: 20px}
+        ul,li{list-style: none}
+        ul{width: auto; height: auto; overflow: hidden; margin: 20px auto; float: right}
+        ul li{margin: 0 8px; float: left; line-height: 32px; color: #555555}
+        ul li a{ display: block; padding:5px 10px; float: left; color: #666; border-radius: 3px; border: 1px solid #d1d1d1; text-decoration: none; line-height: 20px}
+        ul li a:hover{text-decoration: underline}
+        #page{width:60px; padding:3px 10px; color: #666; border-radius: 3px; border: 1px solid #d1d1d1; text-decoration: none; line-height: 20px}
+        ul li .abg{background: #666666; border-color:#666666; color: #ffffff}
+        table{width: 100%; line-height: 30px; text-align: center}
+    &lt;/style&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+&lt;a href=&quot;/index.jsp&quot;&gt;返回首页&lt;/a&gt;
+&lt;table  cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+
+    &lt;tr&gt;
+        &lt;th&gt;编号&lt;/th&gt;
+        &lt;th&gt;标题&lt;/th&gt;
+        &lt;th&gt;请求方式&lt;/th&gt;
+        &lt;th&gt;用户ID&lt;/th&gt;
+        &lt;th&gt;请求参数&lt;/th&gt;
+        &lt;th&gt;请求URI&lt;/th&gt;
+        &lt;th&gt;结束时间&lt;/th&gt;
+        &lt;th&gt;IP地址&lt;/th&gt;
+        &lt;th&gt;异常&lt;/th&gt;
+        &lt;th&gt;日志类型&lt;/th&gt;
+        &lt;th&gt;操作&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;s:iterator value=&quot;#logPage.list&quot;&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&lt;s:property value=&quot;id&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;title&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;method&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;userId&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;params&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;requestUri&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;timeThrough&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;remoteAddr&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;exception&quot;/&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;s:property value=&quot;type&quot;/&gt;&lt;/td&gt;
+            &lt;%--&lt;td&gt;&lt;a href=&quot;log_delete.action?did=&lt;s:property value=&quot;id&quot;/&gt;&quot;&gt;删除&lt;/a&gt; &lt;/td&gt;--%&gt;
+        &lt;/tr&gt;
+    &lt;/s:iterator&gt;
+
+&lt;/table&gt;
+&lt;ul&gt;
+    &lt;li&gt;
+        &lt;s:if test=&quot;%{#logPage.currentPageNum != 1}&quot;&gt;
+            &lt;a href=&quot;log_listPage.action?currentPageNum=1&quot;&gt;首页&lt;/a&gt;
+        &lt;/s:if&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+        &lt;s:if test=&quot;%{#logPage.currentPageNum &gt; 1}&quot;&gt;
+            &lt;a href=&quot;log_listPage.action?currentPageNum=&lt;s:property value=&quot;%{#logPage.currentPageNum - 1}&quot;/&gt; &quot;&gt;上一页&lt;/a&gt;
+        &lt;/s:if&gt;
+    &lt;/li&gt;
+    &lt;s:iterator begin=&quot;%{#logPage.startPageNum}&quot; end=&quot;%{#logPage.endPageNum}&quot; var=&quot;v&quot;&gt;
+        &lt;li&gt;
+            &lt;s:if test=&quot;%{#logPage.currentPageNum == #v}&quot;&gt;
+                &lt;a class=&quot;abg&quot; href=&quot;log_listPage.action?currentPageNum=&lt;s:property value=&quot;v&quot;/&gt; &quot;&gt;&lt;s:property value=&quot;v&quot;/&gt;&lt;/a&gt;
+            &lt;/s:if&gt;
+            &lt;s:else&gt;
+                &lt;a href=&quot;log_listPage.action?currentPageNum=&lt;s:property value=&quot;v&quot;/&gt; &quot;&gt;&lt;s:property value=&quot;v&quot;/&gt;&lt;/a&gt;
+            &lt;/s:else&gt;
+        &lt;/li&gt;
+    &lt;/s:iterator&gt;
+    &lt;li&gt;
+        &lt;s:if test=&quot;%{#logPage.currentPageNum&lt;#logPage.countPageNum}&quot;&gt;
+            &lt;a href=&quot;log_listPage.action?currentPageNum=&lt;s:property value=&quot;%{#logPage.currentPageNum + 1}&quot;/&gt; &quot;&gt;下一页&lt;/a&gt;
+        &lt;/s:if&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+        &lt;s:if test=&quot;%{#logPage.currentPageNum != #logPage.countPageNum}&quot;&gt;
+            &lt;a href=&quot;log_listPage.action?currentPageNum=&lt;s:property value=&quot;%{#logPage.countPageNum}&quot;/&gt;&quot;/&gt; 尾页&lt;/a&gt;
+        &lt;/s:if&gt;
+    &lt;/li&gt;
+    &lt;li&gt;　共 &lt;s:property value=&quot;#logPage.countPageNum&quot;/&gt; 页　&lt;/li&gt;
+    &lt;li&gt;到第&lt;s:textfield id=&quot;page&quot; value=&quot;%{#logPage.currentPageNum}&quot;/&gt;页&lt;/li&gt;
+    &lt;li&gt;　&lt;a href=&quot;javascript:location.href=&#39;log_listPage.action?currentPageNum=&#39;+$(&#39;#page&#39;).val();&quot;&gt;确定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>实现效果：<br><img src="logfenye.jpg" alt="日志分页效果图"></p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
